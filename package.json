@@ -1,0 +1,19 @@
+{
+  "name": "fuse",
+  "main": "./lib/fuse",
+  "version": "0.1.0",
+  "description": "Fuse package for Atom (www.fusetools.com)",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": "fuse:toggle"
+  },
+  "repository": "https://github.com/atom/fuse",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "language-fuse": ">=0.1.0"
+  }
+}
