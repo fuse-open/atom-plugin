@@ -1,6 +1,6 @@
-SelectionChangedEvent = require './selectionChangedEvent'
+SelectionChangedNotifier = require './selectionChangedNotifier'
 Daemon = require './daemon'
-{CompositeDisposable} = require 'atom'
+{CompositeDisposable, Disposable} = require 'atom'
 
 module.exports = Fuse =
   subscriptions: null
@@ -9,23 +9,10 @@ module.exports = Fuse =
   activate: (state) ->
     @daemon = new Daemon
     @subscriptions = new CompositeDisposable
-
-    @subscriptions.add atom.workspace.observeTextEditors (editor) =>
-      if editor.getGrammar().name is "UX"
-        cursorChangeSub = editor.onDidChangeCursorPosition (event) =>
-          @cursorPositionChangedInUxEditor(editor, event)
-        destroySub = editor.onDidDestroy ->
-          cursorChangeSub.dispose()
-          destroySub.dispose()
-
-  cursorPositionChangedInUxEditor: (editor, event) ->
-    path = editor.getPath()
-    text = editor.getText()
-    cursorPos = event.newBufferPosition
-    @daemon.broadcastEvent(
-      new SelectionChangedEvent(path: path, text: text, cursorPos: cursorPos))
+    @subscriptions.add(new SelectionChangedNotifier(@daemon))
 
   deactivate: ->
     @subscriptions.dispose()
+    @daemon.dispose()
 
   serialize: ->
