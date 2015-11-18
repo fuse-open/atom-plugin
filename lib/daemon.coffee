@@ -1,12 +1,13 @@
 {Disposable} = require 'atom'
+DaemonConnection = require './daemonConnection'
 
 module.exports =
 class Daemon extends Disposable
-  constructor: ->
+  constructor: (daemonCommand) ->
     super(@dispose)
+    @daemonConnection = new DaemonConnection daemonCommand
 
   broadcastEvent: (event) =>
-    console.log(event.serialize())
+    @daemonConnection.send event
 
   dispose: =>
-    
