@@ -1,6 +1,11 @@
 {Event, Request} = require './messageTypes.coffee'
 
 module.exports =
+MessageHelper:
+  class MessageHelper
+    @convertToCaretPos: (point) ->
+      return { Line: point.row + 1, Character: point.column + 1 }
+
 SelectionChangedEvent:
   # Public: {SelectionChangedEvent} is a datastructure that can be sent to daemon.
   class SelectionChangedEvent extends Event
@@ -14,7 +19,7 @@ SelectionChangedEvent:
       super "Fuse.Preview.SelectionChanged", {
         Path: data.path,
         Text: data.text,
-        CaretPosition: data.caretPosition
+        CaretPosition: MessageHelper.convertToCaretPos(data.caretPosition)
       }
 
 SubscribeRequest:
@@ -24,4 +29,15 @@ SubscribeRequest:
         Filter: args.filter,
         Replay: args.replay,
         SubscriptionId: args.subscriptionId
+      }
+
+GetCodeSuggestionsRequest:
+  class GetCodeSuggestionsRequest extends Request
+    constructor: (args) ->
+      console.log(MessageHelper.convertToCaretPos(args.caretPosition))
+      super "Fuse.GetCodeSuggestions", {
+        Text: args.text,
+        Path: args.path,
+        SyntaxType: args.syntaxType,
+        CaretPosition: MessageHelper.convertToCaretPos(args.caretPosition)
       }

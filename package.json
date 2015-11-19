@@ -13,6 +13,13 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
+  "providedServices": {
+    "autocomplete.provider": {
+      "versions": {
+        "2.0.0": "getProvider"
+      }
+    }
+  },
   "dependencies": {
     "language-fuse": ">=0.1.0"
   }
