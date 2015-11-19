@@ -1,4 +1,4 @@
-{Event} = require './messageTypes.coffee'
+{SelectionChangedEvent} = require './messages'
 {Disposable} = require 'atom'
 
 # Public: The {SelectionChangedNotifier} will listen for
@@ -37,27 +37,3 @@ class SelectionChangedNotifier extends Disposable
 
   dispose: =>
     @textEditorSub.dispose()
-
-  # Public: {SelectionChangedEvent} is a datastructure that can be sent to daemon.
-  class SelectionChangedEvent extends Event
-    # Creates a new {SelectionChangedEvent}.
-    # data - An object consisting of:
-    #   path - The {string} path of file where selection happened.
-    #   text - The {string} text of the file selected
-    #           (this may differ from what is saved to disk).
-    #   caretPosition - A {Point} storing caret position in file.
-    constructor: (data) ->
-      super "Fuse.Preview.SelectionChanged"
-      {@path, @text, @caretPosition} = data
-
-    serialize: =>
-      caretPosition = {
-        Line: @caretPosition.row + 1,
-        Character: @caretPosition.column + 1
-      }
-      
-      return super({
-        Path: @path,
-        Text: @text,
-        CaretPosition: caretPosition
-      })

@@ -1,5 +1,6 @@
 SelectionChangedNotifier = require './selectionChangedNotifier'
 Daemon = require './daemon'
+{SubscribeRequest} = require './messages'
 process = require 'process'
 {CompositeDisposable, Disposable} = require 'atom'
 
@@ -18,6 +19,14 @@ module.exports = Fuse =
       process.env["PATH"] += ":/usr/local/bin"
 
     @daemon = new Daemon(atom.config.get("fuse.fuseCommand"))
+
+    @daemon.request(
+      new SubscribeRequest(
+        filter: ".*",
+        replay: false,
+        subscriptionId: 0
+      ))
+
     @subscriptions = new CompositeDisposable
     @subscriptions.add(new SelectionChangedNotifier(@daemon))
 
