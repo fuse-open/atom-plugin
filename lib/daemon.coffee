@@ -4,20 +4,31 @@ DaemonConnection = require './daemonConnection'
 module.exports =
 class Daemon extends Disposable
   lastRequestId: 0
-  requestsInAir: []
+  requestsInAir: {}
 
   constructor: (daemonCommand) ->
     super(@dispose)
-    @daemonConnection = new DaemonConnection(daemonCommand, (msg) =>
-      console.log(msg.messageType))
+    @daemonConnection = new DaemonConnection(daemonCommand, @messageFromDaemon)
 
   broadcastEvent: (event) =>
     @daemonConnection.send(event.messageType, event.serialize())
 
-  request: (request) =>
+  messageFromDaemon: (msg) =>
+    if(msg.messageType == "Response")
+      request = @requestsInAir[msg.id]
+      if not request?
+        console.log(
+          'fuse: Got response however response id does not match any request.')
+
+      request.callback(msg)
+
+  request: (request, callback) =>
+    if not callback?
+      throw new Error("Expected callback to not be undefined.")
+
     id = @getUniqueRequestId()
     serializedMsg = request.serialize(id)
-    @requestsInAir.push { name: request.name, id: id }
+    @requestsInAir[id] = { callback: callback }
     @daemonConnection.send(request.messageType, serializedMsg)
 
   getUniqueRequestId: ->

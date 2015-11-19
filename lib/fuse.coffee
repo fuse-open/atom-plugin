@@ -25,7 +25,10 @@ module.exports = Fuse =
         filter: ".*",
         replay: false,
         subscriptionId: 0
-      ))
+      ),
+      (response) =>
+        console.log(response.status)
+    )
 
     @subscriptions = new CompositeDisposable
     @subscriptions.add(new SelectionChangedNotifier(@daemon))

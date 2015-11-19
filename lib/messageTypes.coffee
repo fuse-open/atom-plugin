@@ -47,7 +47,7 @@ Request:
       return request
 Response:
   class Response extends Message
-    constructor: (@id, @result) ->
+    constructor: (@id, @status, @errors, @result) ->
       super "Response"
 
     serialize: ->
@@ -58,5 +58,8 @@ Response:
 
     @deserialize: (json) ->
       resObj = JSON.parse(json)
-      response = new Response(resObj.Id, resObj.Result)
+      response = new Response(resObj.Id,
+        resObj.Status,
+        resObj.Errors,
+        resObj.Result)
       return response

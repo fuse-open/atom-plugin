@@ -50,7 +50,7 @@ module.exports =
           break # Incomplete data
 
         jsonData = buffer.toString('utf-8', startOfData, endOfData)
-        msgCallback Message.deserialize(msgType, jsonData)
+        msgCallback? Message.deserialize(msgType, jsonData)
         start = endOfData
 
       return buffer.slice(start, buffer.length)
