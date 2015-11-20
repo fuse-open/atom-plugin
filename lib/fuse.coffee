@@ -26,7 +26,7 @@ module.exports = Fuse =
     @subscriptions.add(new SelectionChangedNotifier(@daemon))
 
   getProvider: ->
-    @uxProvider
+    #@uxProvider
 
   deactivate: ->
     @subscriptions.dispose()
