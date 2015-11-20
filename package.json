@@ -7,7 +7,6 @@
   ],
   "activationCommands": {
   },
-  "activationHooks": ["language-fuse:grammar-used"],
   "repository": "https://github.com/atom/fuse",
   "license": "MIT",
   "engines": {
