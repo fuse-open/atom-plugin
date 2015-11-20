@@ -58,5 +58,5 @@ class Daemon extends Disposable
       @daemonConnection = null
 
     dispose: =>
-      @daemonConnection.dispose()
+      @daemonConnection?.dispose()
       @daemonConnection = null
