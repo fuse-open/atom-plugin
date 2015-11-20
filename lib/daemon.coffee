@@ -4,11 +4,12 @@ DaemonConnection = require './daemonConnection'
 module.exports =
 class Daemon extends Disposable
   lastRequestId: 0
+  daemonConnection: null
   requestsInAir: {}
 
   constructor: (daemonCommand) ->
     super(@dispose)
-    @daemonConnection = new DaemonConnection(daemonCommand, @messageFromDaemon)
+    @daemonConnection = new DaemonReconnector(daemonCommand, @messageFromDaemon)
 
   broadcastEvent: (event) =>
     @daemonConnection.send(event.messageType, event.serialize())
@@ -19,6 +20,7 @@ class Daemon extends Disposable
       if not request?
         console.log(
           'fuse: Got response however response id does not match any request.')
+        return
 
       request.callback(msg)
 
@@ -36,3 +38,25 @@ class Daemon extends Disposable
 
   dispose: =>
     @daemonConnection.dispose()
+
+  class DaemonReconnector extends Disposable
+    constructor: (@daemonCommand, @msgReceivedCallback) ->
+      super(@dispose)
+      @daemonConnection = @connect()
+
+    connect: ->
+      return new DaemonConnection(@daemonCommand, @msgReceivedCallback, @onLostConnection)
+
+    send: (msgType, serializedMsg) =>
+      if not @daemonConnection?
+        console.log('fuse: Connects to daemon again.')
+        @daemonConnection = @connect()
+
+      @daemonConnection.send(msgType, serializedMsg)
+
+    onLostConnection: =>
+      @daemonConnection = null
+
+    dispose: =>
+      @daemonConnection.dispose()
+      @daemonConnection = null

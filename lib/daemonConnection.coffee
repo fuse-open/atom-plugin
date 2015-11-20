@@ -6,7 +6,7 @@ module.exports =
   class DaemonConnection extends Disposable
     fuseClient: null
 
-    constructor: (daemonCommand, @msgReceivedCallback) ->
+    constructor: (daemonCommand, @msgReceivedCallback, @onExit) ->
       super(@dispose)
       @fuseClient = spawn(daemonCommand, ['daemon-client', 'Atom Plugin'])
 
@@ -17,11 +17,12 @@ module.exports =
       )
 
       @fuseClient.stderr.on('data', (data) ->
-        console.log('fuse: ' + data.toString('utf-8'))
+        console.log(data.toString('utf-8'))
       )
 
-      @fuseClient.on('close', (code) ->
+      @fuseClient.on('close', (code) =>
         console.log('fuse: daemon client closed with code ' + code)
+        @onExit?()
       )
 
     parseMsgFromBuffer: (buffer, msgCallback) =>
@@ -80,3 +81,5 @@ module.exports =
       @fuseClient.stdin.write packedMsg
 
     dispose: =>
+      @fuseClient.kill()
+      @onExit()
