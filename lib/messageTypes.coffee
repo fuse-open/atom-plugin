@@ -25,8 +25,8 @@ Event:
 
     @deserialize: (json) ->
       evtObj = JSON.parse(json)
-      event = new Event(evtObj.Name)
-      event["data"] = evtObj.Data
+      event = new Event(evtObj.Name, evtObj.Data)      
+      event["subscriptionId"] = evtObj.SubscriptionId
       return event
 Request:
   class Request extends Message

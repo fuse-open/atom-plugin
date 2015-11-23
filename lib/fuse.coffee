@@ -34,6 +34,18 @@ module.exports = Fuse =
 
     @uxProvider = new UXProvider @daemon
 
+    buildId = 0
+    @daemon.observeBroadcastedEvents 'Fuse.BuildStarted', false, (msg) ->
+      errorlistModel.clear()
+      if msg.data.BuildType == 'LoadMarkup'
+        buildId = msg.data.BuildId
+
+    @daemon.observeBroadcastedEvents 'Fuse.BuildIssueDetected', false, (msg) ->
+      if msg.data.BuildId == buildId
+        position = msg.data.StartPosition ? {Line: 0, Character: 0}
+        position = new Point(position.Line - 1, position.Character - 1)
+        errorlistModel.report type: msg.data.IssueType, description: msg.data.Message, file: msg.data.Path, position: position
+
   initializeViewProviders: (state) ->
     atom.views.addViewProvider ErrorListModel, (errorList) ->
       errorListView = new ErrorListView state.errorListViewState, errorList

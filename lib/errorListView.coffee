@@ -11,11 +11,21 @@ ErrorListModel:
 
     observeBuildEvents: (callback) ->
       callback(buildEvent) for buildEvent in @buildEvents
-      @emitter.on 'new-build-event', callback
+      return @emitter.on 'new-build-event', callback
 
     report: (args) ->
       @buildEvents.push args
       @emitter.emit 'new-build-event', args
+
+    observeOnClear: (callback) ->
+      return @emitter.on 'clear-build-events', callback
+
+    openEditorForPath: (file, position) ->
+      atom.workspace.open(file, initialLine: position.row + 1, initialColumn: position.column + 1)
+
+    clear: ->
+      buildEvents = []
+      @emitter.emit 'clear-build-events'
 
 ErrorListView:
   class ErrorListView extends View
@@ -33,21 +43,25 @@ ErrorListView:
                 @th 'Line : Column'
             @tbody outlet: 'errorTableBody'
 
-    initialize: (serializedState, model) ->
+    initialize: (serializedState, @model) ->
       @body.height serializedState?.height
       @handleEvents()
 
-      @buildEventsSub = model?.observeBuildEvents (evt) =>
+      @buildEventsSub = @model?.observeBuildEvents (evt) =>
         @report(evt.type, evt.description, evt.file, evt.position)
+
+      @clearSub = @model?.observeOnClear =>
+        @clear()
 
     destroy: =>
       @buildEventsSub?.dispose()
+      @clearSub?.dispose()
 
     clear: ->
       @errorTableBody.empty()
 
     report: (type, message, file, position) ->
-      pos = {line: position.row + 1, character: position.column}
+      pos = {line: position.row + 1, character: position.column + 1}
       if typeof message == 'string'
         @errorTableBody.append "<tr><td>#{type}</td><td>#{message}</td><td>#{file}</td><td>#{pos.line} : #{pos.character}</td></tr>"
       else
@@ -56,7 +70,13 @@ ErrorListView:
       @show()
 
     handleEvents: ->
-      @on 'mousedown', '.view-resize-handle', (e) => @resizeStarted(e)
+      @on 'mousedown', '.view-resize-handle', @resizeStarted
+      @on 'dblclick', '.error-list-table tr', @errorDoubleClicked
+
+    errorDoubleClicked: (e) =>
+      target = e.currentTarget
+      path = target.cells[2].outerText
+      @model.openEditorForPath path, new Point(0,0)
 
     resizeStarted: =>
       $(document).on('mousemove', @resizeView)
