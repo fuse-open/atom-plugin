@@ -5,4 +5,30 @@
 @import "ui-variables";
 
 .fuse {
+  &.view-resizer {
+    overflow: hidden;
+    cursor: default;
+    -webkit-user-select: none;
+
+    .view-resize-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      height: 10px;
+      width: 100%;
+      cursor: ns-resize;
+      z-index: 3;
+    }
+  }
+
+  .view-scroller {
+    width: 100%;
+    overflow:auto;
+  }
+
+  .error-list-table {
+    width: 100%;
+    cursor: text;
+    -webkit-user-select: text;
+  }
 }
