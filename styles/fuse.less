@@ -28,7 +28,18 @@
 
   .error-list-table {
     width: 100%;
-    cursor: text;
-    -webkit-user-select: text;
+
+    th {
+      padding: 5px;
+      font-size: 1.2em;
+    }
+
+    tr:hover {
+      background-color: @button-background-color-hover;
+    }
+
+    td {
+      padding: 5px;
+    }
   }
 }

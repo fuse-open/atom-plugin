@@ -1,10 +1,10 @@
 SelectionChangedNotifier = require './selectionChangedNotifier'
 Daemon = require './daemon'
 UXProvider = require './uxProvider'
-ErrorListView = require './errorListView'
+{ErrorListView, ErrorListModel} = require './errorListView'
 {SubscribeRequest} = require './messages'
 process = require 'process'
-{CompositeDisposable, Disposable} = require 'atom'
+{CompositeDisposable, Disposable, Point} = require 'atom'
 
 module.exports = Fuse =
   config:
@@ -17,25 +17,33 @@ module.exports = Fuse =
   daemon: null
 
   activate: (state) ->
-    console.log("Starting fuse.")
+    console.log('fuse: Starting fuse.')
     if process.platform == 'darwin'
       process.env["PATH"] += ':/usr/local/bin'
 
-    @daemon = new Daemon(atom.config.get("fuse.fuseCommand"))
-    @errorList = new ErrorListView(state.errorListViewState)
-    @errorList.show()
-    atom.workspace.addBottomPanel(item: @errorList, priority: 100)
+    @subscriptions = new CompositeDisposable
+    @initializeViewProviders state
+
+    @daemon = new Daemon(atom.config.get('fuse.fuseCommand'))
+    @subscriptions.add @daemon
+    @subscriptions.add new SelectionChangedNotifier(@daemon)
+
+    errorlistModel = new ErrorListModel
+    @errorList = atom.views.getView(errorlistModel)
+    atom.workspace.addBottomPanel(item: @errorList, visibility: true, priority: 100)
+
     @uxProvider = new UXProvider @daemon
 
-    @subscriptions = new CompositeDisposable
-    @subscriptions.add(new SelectionChangedNotifier(@daemon))
+  initializeViewProviders: (state) ->
+    atom.views.addViewProvider ErrorListModel, (errorList) ->
+      errorListView = new ErrorListView state.errorListViewState, errorList
+      return errorListView
 
   getProvider: ->
     #@uxProvider
 
   deactivate: ->
     @subscriptions.dispose()
-    @daemon.dispose()
     @errorList.destroy()
 
   serialize: ->

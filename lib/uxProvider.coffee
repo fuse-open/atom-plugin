@@ -1,5 +1,4 @@
 {GetCodeSuggestionsRequest} = require './messages'
-{Point} = require 'atom'
 
 module.exports =
 class UXProvider
