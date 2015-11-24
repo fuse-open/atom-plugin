@@ -32,13 +32,14 @@ module.exports = Fuse =
     @subscriptions.add @daemon
     @subscriptions.add new SelectionChangedNotifier(@daemon)
 
+    @fuseBottomPanel = new FuseBottomPanel state.fuseBottomPanel
+    atom.workspace.addBottomPanel(item: @fuseBottomPanel, visibility: true, priority: 100)
+
     buildObserver = new BuildObserver @daemon.observeBroadcastedEvents
     @subscriptions.add buildObserver
 
     errorlistModel = new ErrorListModel buildObserver
-    @fuseBottomPanel = new FuseBottomPanel state.fuseBottomPanel
-    @fuseBottomPanel.setInnerElement 'Error List', atom.views.getView(errorlistModel)
-    atom.workspace.addBottomPanel(item: @fuseBottomPanel, visibility: true, priority: 100)
+    @fuseBottomPanel.addTab 'Error List', -> atom.views.getView(errorlistModel)
 
     @uxProvider = new UXProvider @daemon
 
@@ -51,8 +52,8 @@ module.exports = Fuse =
     #@uxProvider
 
   deactivate: ->
-    @subscriptions.dispose()
+    @subscriptions?.dispose()
     @fuseBottomPanel?.destroy()
 
   serialize: ->
-    fuseBottomPanel: @fuseBottomPanel.serialize()
+    fuseBottomPanel: @fuseBottomPanel?.serialize()
