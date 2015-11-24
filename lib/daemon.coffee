@@ -23,7 +23,7 @@ class Daemon extends Disposable
   broadcastEvent: (event) ->
     @daemonConnection.send(event.messageType, event.serialize())
 
-  observeBroadcastedEvents: (filter, replay, callback) ->
+  observeBroadcastedEvents: (filter, replay, callback) =>
     subscriptionId = @getUniqueId()
     subscribeRequest = new SubscribeRequest {
       filter: filter,

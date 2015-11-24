@@ -6,8 +6,21 @@ ErrorListModel:
   class ErrorListModel
     buildEvents: []
 
-    constructor: ->
+    constructor: (@buildObserver) ->
       @emitter = new Emitter
+
+      lastId = -1
+      buildObserver.observeOnBuildStarted (msg) =>
+        if lastId != msg.data.BuildId
+          lastId = msg.data.BuildId
+          @clear()
+
+      buildObserver.observeOnBuildIssues (msg) =>
+        if lastId != msg.data.BuildId
+          return
+        position = msg.data.StartPosition ? {Line: 0, Character: 0}
+        position = new Point(position.Line - 1, position.Character - 1)
+        @report type: msg.data.IssueType, description: msg.data.Message, file: msg.data.Path, position: position
 
     observeBuildEvents: (callback) ->
       callback(buildEvent) for buildEvent in @buildEvents
@@ -21,7 +34,7 @@ ErrorListModel:
       return @emitter.on 'clear-build-events', callback
 
     openEditorForPath: (file, position) ->
-      atom.workspace.open(file, initialLine: position.row + 1, initialColumn: position.column + 1)
+      atom.workspace.open(file, initialLine: position.row, initialColumn: position.column)
 
     clear: ->
       buildEvents = []
