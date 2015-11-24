@@ -89,7 +89,8 @@ ErrorListView:
     errorDoubleClicked: (e) =>
       target = e.currentTarget
       path = target.cells[2].outerText
-      @model.openEditorForPath path, new Point(0,0)
+      lineCol = target.cells[3].outerText.split(' : ')
+      @model.openEditorForPath path, new Point(parseInt(lineCol[0]), parseInt(lineCol[1]))
 
     resizeStarted: =>
       $(document).on('mousemove', @resizeView)
