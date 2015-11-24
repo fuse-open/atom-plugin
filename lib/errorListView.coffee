@@ -90,7 +90,7 @@ ErrorListView:
       target = e.currentTarget
       path = target.cells[2].outerText
       lineCol = target.cells[3].outerText.split(' : ')
-      @model.openEditorForPath path, new Point(parseInt(lineCol[0]), parseInt(lineCol[1]))
+      @model.openEditorForPath path, new Point(parseInt(lineCol[0]) - 1, parseInt(lineCol[1]) - 1)
 
     resizeStarted: =>
       $(document).on('mousemove', @resizeView)
