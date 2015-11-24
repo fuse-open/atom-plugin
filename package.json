@@ -20,7 +20,10 @@
     }
   },
   "dependencies": {
-    "language-fuse": ">=0.1.0",
+    "atom-package-dependencies": "latest",
     "atom-space-pen-views": ">=2.1.0"
+  },
+  "package-dependencies": {
+    "language-fuse": ">=0.1.0"
   }
 }

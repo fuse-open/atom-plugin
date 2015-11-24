@@ -6,6 +6,8 @@ BuildObserver = require './buildObserver'
 {SubscribeRequest} = require './messages'
 process = require 'process'
 {CompositeDisposable, Disposable, Point} = require 'atom'
+apd = require('atom-package-dependencies');
+apd.install()
 
 module.exports = Fuse =
   config:
