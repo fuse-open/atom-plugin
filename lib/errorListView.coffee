@@ -43,21 +43,16 @@ ErrorListModel:
 ErrorListView:
   class ErrorListView extends View
     @content: ->
-      @div class: 'fuse view-resizer panel', =>
-        @div class: 'view-resize-handle', outlet: 'resizeHandle'
-        @div class: 'panel-heading', dblclick: 'toggle', outlet: 'heading', 'Fuse - Error List'
-        @div class: 'panel-body view-scroller', outlet: 'body', =>
-          @table class: 'error-list-table native-key-bindings', tabindex: -1, =>
-            @thead =>
-              @tr =>
-                @th 'Type'
-                @th 'Description'
-                @th 'File'
-                @th 'Line : Column'
-            @tbody outlet: 'errorTableBody'
+      @table class: 'error-list-table native-key-bindings', tabindex: -1, =>
+        @thead =>
+          @tr =>
+            @th 'Type'
+            @th 'Description'
+            @th 'File'
+            @th 'Line : Column'
+        @tbody outlet: 'errorTableBody'
 
     initialize: (serializedState, @model) ->
-      @body.height serializedState?.height
       @handleEvents()
 
       @buildEventsSub = @model?.observeBuildEvents (evt) =>
@@ -83,7 +78,6 @@ ErrorListView:
       @show()
 
     handleEvents: ->
-      @on 'mousedown', '.view-resize-handle', @resizeStarted
       @on 'dblclick', '.error-list-table tr', @errorDoubleClicked
 
     errorDoubleClicked: (e) =>
@@ -92,17 +86,5 @@ ErrorListView:
       lineCol = target.cells[3].outerText.split(' : ')
       @model.openEditorForPath path, new Point(parseInt(lineCol[0]) - 1, parseInt(lineCol[1]) - 1)
 
-    resizeStarted: =>
-      $(document).on('mousemove', @resizeView)
-      $(document).on('mouseup', @resizeStopped)
-
-    resizeStopped: =>
-      $(document).off('mousemove', @resizeView)
-      $(document).off('mouseup', @resizeStopped)
-
-    resizeView: ({which, pageY}) =>
-      return @resizeStopped() unless which is 1
-      @body.height($(document.body).height() - pageY - @heading.outerHeight())
-
     serialize: ->
-      height: @body.height()
+      

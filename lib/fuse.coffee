@@ -6,6 +6,7 @@ BuildObserver = require './buildObserver'
 {SubscribeRequest} = require './messages'
 process = require 'process'
 {CompositeDisposable, Disposable, Point} = require 'atom'
+FuseBottomPanel = require './fuseBottomPanel'
 apd = require('atom-package-dependencies');
 apd.install()
 
@@ -35,8 +36,9 @@ module.exports = Fuse =
     @subscriptions.add buildObserver
 
     errorlistModel = new ErrorListModel buildObserver
-    @errorList = atom.views.getView(errorlistModel)
-    atom.workspace.addBottomPanel(item: @errorList, visibility: true, priority: 100)
+    @fuseBottomPanel = new FuseBottomPanel state.fuseBottomPanel
+    @fuseBottomPanel.setInnerElement 'Error List', atom.views.getView(errorlistModel)
+    atom.workspace.addBottomPanel(item: @fuseBottomPanel, visibility: true, priority: 100)
 
     @uxProvider = new UXProvider @daemon
 
@@ -50,7 +52,7 @@ module.exports = Fuse =
 
   deactivate: ->
     @subscriptions.dispose()
-    @errorList.destroy()
+    @fuseBottomPanel?.destroy()
 
   serialize: ->
-    errorListViewState: @errorList.serialize()
+    fuseBottomPanel: @fuseBottomPanel.serialize()
