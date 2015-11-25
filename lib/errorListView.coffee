@@ -48,14 +48,15 @@ ErrorListModel:
 ErrorListView:
   class ErrorListView extends View
     @content: ->
-      @table class: 'error-list-table native-key-bindings', tabindex: -1, =>
-        @thead =>
-          @tr =>
-            @th 'Type'
-            @th 'Description'
-            @th 'File'
-            @th 'Line : Column'
-        @tbody outlet: 'errorTableBody'
+      @div =>
+        @table class: 'error-list-table native-key-bindings', tabindex: -1, =>
+          @thead =>
+            @tr =>
+              @th 'Type'
+              @th 'Description'
+              @th 'File'
+              @th 'Line : Column'
+          @tbody outlet: 'errorTableBody'
 
     initialize: (@model) ->
       @handleEvents()
