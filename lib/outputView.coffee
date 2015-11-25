@@ -26,8 +26,8 @@ OutputView:
         @pre class: 'native-key-bindings', outlet: 'output', tabindex: -1
 
     initialize: (model) ->
-      model.observeLogEvents (logEvent) =>
-       @log(logEvent.message)
+      @logEventSub = model.observeLogEvents (logEvent) =>
+        @log(logEvent.message)
 
     log: (message) ->
       if typeof message == 'string'
@@ -35,3 +35,6 @@ OutputView:
           @p message
       else
         @output.append message
+
+    destroy: ->
+      logEventSub?.dispose()
