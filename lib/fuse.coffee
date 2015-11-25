@@ -41,7 +41,7 @@ module.exports = Fuse =
     @subscriptions.add buildObserver
 
     errorlistModel = new ErrorListModel buildObserver
-    outputModel = new OutputModel
+    outputModel = new OutputModel buildObserver
 
     @fuseBottomPanel.addTab 'Error List', ->
       new ErrorListView errorlistModel

@@ -10,20 +10,20 @@ ErrorListModel:
       @emitter = new Emitter
 
       lastId = -1
-      buildObserver.observeOnBuildStarted (msg) =>
-        if lastId != msg.data.BuildId
-          lastId = msg.data.BuildId
+      buildObserver.observeOnBuildStarted (data) =>
+        if lastId != data.BuildId
+          lastId = data.BuildId
           @clear()
 
-      buildObserver.observeOnBuildIssues (msg) =>
-        if lastId != msg.data.BuildId
+      buildObserver.observeOnBuildIssues (data) =>
+        if lastId != data.BuildId
           return
-        position = msg.data.StartPosition ? {Line: 0, Character: 0}
+        position = data.StartPosition ? {Line: 0, Character: 0}
         position = new Point(position.Line - 1, position.Character - 1)
         @report({
-          type: msg.data.IssueType,
-          description: msg.data.Message,
-          file: msg.data.Path,
+          type: data.IssueType,
+          description: data.Message,
+          file: data.Path,
           position: position
         })
 

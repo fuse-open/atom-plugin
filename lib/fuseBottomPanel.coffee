@@ -32,7 +32,7 @@ class FuseBottomPanel extends View
   setInnerElement: (header, element) ->
     @headText.text('Fuse - ' + header)
     @body.empty().append(element)
-
+    
     @innerElement?.destroy?()
     @innerElement = element
 
