@@ -57,7 +57,7 @@ ErrorListView:
             @th 'Line : Column'
         @tbody outlet: 'errorTableBody'
 
-    initialize: (serializedState, @model) ->
+    initialize: (@model) ->
       @handleEvents()
 
       @buildEventsSub = @model?.observeBuildEvents (evt) =>
