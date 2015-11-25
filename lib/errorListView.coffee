@@ -20,7 +20,12 @@ ErrorListModel:
           return
         position = msg.data.StartPosition ? {Line: 0, Character: 0}
         position = new Point(position.Line - 1, position.Character - 1)
-        @report type: msg.data.IssueType, description: msg.data.Message, file: msg.data.Path, position: position
+        @report({
+          type: msg.data.IssueType,
+          description: msg.data.Message,
+          file: msg.data.Path,
+          position: position
+        })
 
     observeBuildEvents: (callback) ->
       callback(buildEvent) for buildEvent in @buildEvents
