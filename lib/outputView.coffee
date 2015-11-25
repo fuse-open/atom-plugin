@@ -49,7 +49,7 @@ OutputView:
   class OutputView extends View
     @content: ->
       @div =>
-        @pre class: 'native-key-bindings', outlet: 'output', tabindex: -1
+        @pre class: 'output-panel native-key-bindings', outlet: 'output', tabindex: -1
 
     initialize: (model) ->
       @logEventSub = model.observeLogEvents (logEvent) =>
