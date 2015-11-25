@@ -36,6 +36,9 @@ module.exports = Fuse =
     @fuseBottomPanel = new FuseBottomPanel state.fuseBottomPanel
     atom.workspace.addBottomPanel(item: @fuseBottomPanel, visibility: true, priority: 100)
 
+    @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:panel': =>
+      @fuseBottomPanel.toggle()
+
     buildObserver = new BuildObserver @daemon.observeBroadcastedEvents
     @subscriptions.add buildObserver
 

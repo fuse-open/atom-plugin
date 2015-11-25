@@ -8,6 +8,8 @@
     'submenu': [
       'label': 'Fuse'
       'submenu': [
+          'label': 'Show Panel'
+          'command': 'fuse:panel'
       ]
     ]
   }
