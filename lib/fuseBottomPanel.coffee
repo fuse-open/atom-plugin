@@ -30,7 +30,7 @@ class FuseBottomPanel extends View
       ++@numTabs
 
   setInnerElement: (header, element) ->
-    @headText.replaceWith('Fuse - ' + header)
+    @headText.text('Fuse - ' + header)
     @body.empty().append(element)
 
     @innerElement?.destroy?()
