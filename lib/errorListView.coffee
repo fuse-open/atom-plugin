@@ -39,6 +39,8 @@ ErrorListModel:
       return @emitter.on 'clear-build-events', callback
 
     openEditorForPath: (file, position) ->
+      if not file
+        return
       atom.workspace.open(file, initialLine: position.row, initialColumn: position.column)
 
     clear: ->
