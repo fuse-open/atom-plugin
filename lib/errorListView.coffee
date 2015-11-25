@@ -42,7 +42,7 @@ ErrorListModel:
       atom.workspace.open(file, initialLine: position.row, initialColumn: position.column)
 
     clear: ->
-      buildEvents = []
+      @buildEvents = []
       @emitter.emit 'clear-build-events'
 
 ErrorListView:
