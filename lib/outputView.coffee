@@ -1,18 +1,37 @@
 {$, $$, View} = require 'atom-space-pen-views'
+{Emitter} = require 'atom'
 
 module.exports =
-class OutputView extends View
-  @content: ->
-    @div =>
-      @pre class: 'native-key-bindings', outlet: 'output', tabindex: -1
+OutputModel:
+  class OutputModel
+    logEvents: []
 
-  initialize: ->
-    for i in [0..100]
-      @log("Message " + i, "Error")
+    constructor: ->
+      @emitter = new Emitter
+      for i in [0..100]
+        @log message: "Message " + i
 
-  log: (message, level) ->
-    if typeof message == 'string'
-      @output.append $$ ->
-        @p message
-    else
-      @output.append message
+    observeLogEvents: (callback) ->
+      callback(logEvent) for logEvent in @logEvents
+      return @emitter.on 'new-log-event', callback
+
+    log: (logEvent) ->
+      @logEvents.push logEvent
+      @emitter.emit 'new-log-event', logEvent
+
+OutputView:
+  class OutputView extends View
+    @content: ->
+      @div =>
+        @pre class: 'native-key-bindings', outlet: 'output', tabindex: -1
+
+    initialize: (model) ->
+      model.observeLogEvents (logEvent) =>
+       @log(logEvent.message)
+
+    log: (message) ->
+      if typeof message == 'string'
+        @output.append $$ ->
+          @p message
+      else
+        @output.append message

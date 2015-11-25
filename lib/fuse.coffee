@@ -7,7 +7,7 @@ BuildObserver = require './buildObserver'
 process = require 'process'
 {CompositeDisposable, Disposable, Point} = require 'atom'
 FuseBottomPanel = require './fuseBottomPanel'
-OutputView = require './outputView'
+{OutputView, OutputModel} = require './outputView'
 apd = require('atom-package-dependencies');
 apd.install()
 
@@ -43,16 +43,19 @@ module.exports = Fuse =
     @subscriptions.add buildObserver
 
     errorlistModel = new ErrorListModel buildObserver
+    outputModel = new OutputModel
 
     @fuseBottomPanel.addTab 'Error List', -> atom.views.getView(errorlistModel)
-    @fuseBottomPanel.addTab 'Output', -> new OutputView
+    @fuseBottomPanel.addTab 'Output', -> atom.views.getView(outputModel)
 
     @uxProvider = new UXProvider @daemon
 
   initializeViewProviders: (state) ->
     atom.views.addViewProvider ErrorListModel, (errorList) ->
-      errorListView = new ErrorListView state.errorListViewState, errorList
-      return errorListView
+      new ErrorListView state.errorListViewState, errorList
+
+    atom.views.addViewProvider OutputModel, (outputModel) ->
+      new OutputView outputModel
 
   getProvider: ->
     #@uxProvider
