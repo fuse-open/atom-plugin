@@ -17,7 +17,7 @@ OutputModel:
 
       lastId = -1
       @subscriptions.add buildObserver.observeOnBuildStarted (data) =>
-        if lastId != data.BuildId
+        if data.BuildType == "FullCompile" and lastId != data.BuildId
           lastId = data.BuildId
           @clear()
 
