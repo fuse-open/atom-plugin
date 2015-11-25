@@ -84,7 +84,7 @@ ErrorListView:
       @show()
 
     handleEvents: ->
-      @on 'dblclick', '.error-list-table tr', @errorDoubleClicked
+      @on 'dblclick', '.error-list-table tbody tr', @errorDoubleClicked
 
     errorDoubleClicked: (e) =>
       target = e.currentTarget
