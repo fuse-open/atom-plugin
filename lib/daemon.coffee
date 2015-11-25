@@ -67,6 +67,7 @@ class Daemon extends Disposable
     return @uniqueId++
 
   dispose: =>
+    eventSubscriptions = []
     @daemonConnection.dispose()
 
   class DaemonReconnector extends Disposable
