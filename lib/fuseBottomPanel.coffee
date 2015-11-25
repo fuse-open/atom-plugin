@@ -5,7 +5,7 @@ class FuseBottomPanel extends View
   @content: ->
     @div class: 'fuse view-resizer panel', =>
       @div class: 'view-resize-handle', outlet: 'resizeHandle'
-      @div class: 'panel-heading', dblclick: 'toggle', outlet: 'heading', =>
+      @div class: 'fuse-panel-heading panel-heading', dblclick: 'toggle', outlet: 'heading', =>
         @span outlet: 'headText', 'Fuse'
       @div class: 'panel-body view-scroller', outlet: 'body'
 
@@ -22,7 +22,7 @@ class FuseBottomPanel extends View
   addTab: (header, factory) ->
     id = header.replace(/\s+/g, '-')
     @heading.prepend $$ ->
-      @button class: 'btn pull-right', id: id, header
+      @button class: 'fuse-button btn pull-right', id: id, header
     @on 'click', "\##{id}", (args) => @setInnerElement(header, factory())
 
     if @numTabs == 0
@@ -32,7 +32,7 @@ class FuseBottomPanel extends View
   setInnerElement: (header, element) ->
     @headText.text('Fuse - ' + header)
     @body.empty().append(element)
-    
+
     @innerElement?.destroy?()
     @innerElement = element
 
