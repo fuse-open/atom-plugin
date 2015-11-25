@@ -27,11 +27,9 @@ module.exports = Fuse =
       process.env["PATH"] += ':/usr/local/bin'
 
     @subscriptions = new CompositeDisposable
-    @initializeViewProviders state
-
     @daemon = new Daemon(atom.config.get('fuse.fuseCommand'))
     @subscriptions.add @daemon
-    @subscriptions.add new SelectionChangedNotifier(@daemon)
+    @subscriptions.add new SelectionChangedNotifier @daemon
 
     @fuseBottomPanel = new FuseBottomPanel state.fuseBottomPanel
     atom.workspace.addBottomPanel(item: @fuseBottomPanel, visibility: true, priority: 100)
@@ -45,17 +43,12 @@ module.exports = Fuse =
     errorlistModel = new ErrorListModel buildObserver
     outputModel = new OutputModel
 
-    @fuseBottomPanel.addTab 'Error List', -> atom.views.getView(errorlistModel)
-    @fuseBottomPanel.addTab 'Output', -> atom.views.getView(outputModel)
+    @fuseBottomPanel.addTab 'Error List', ->
+      new ErrorListView errorlistModel
+    @fuseBottomPanel.addTab 'Output', ->
+      new OutputView outputModel
 
     @uxProvider = new UXProvider @daemon
-
-  initializeViewProviders: (state) ->
-    atom.views.addViewProvider ErrorListModel, (errorList) ->
-      new ErrorListView state.errorListViewState, errorList
-
-    atom.views.addViewProvider OutputModel, (outputModel) ->
-      new OutputView outputModel
 
   getProvider: ->
     #@uxProvider
