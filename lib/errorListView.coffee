@@ -61,7 +61,7 @@ ErrorListView:
       @clearSub = @model?.observeOnClear =>
         @clear()
 
-    destroy: =>
+    destroy: ->
       @buildEventsSub?.dispose()
       @clearSub?.dispose()
 
@@ -85,6 +85,3 @@ ErrorListView:
       path = target.cells[2].outerText
       lineCol = target.cells[3].outerText.split(' : ')
       @model.openEditorForPath path, new Point(parseInt(lineCol[0]) - 1, parseInt(lineCol[1]) - 1)
-
-    serialize: ->
-      

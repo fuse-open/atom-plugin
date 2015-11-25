@@ -6,8 +6,10 @@ class FuseBottomPanel extends View
     @div class: 'fuse view-resizer panel', =>
       @div class: 'view-resize-handle', outlet: 'resizeHandle'
       @div class: 'panel-heading', dblclick: 'toggle', outlet: 'heading', =>
-        @span id: 'headText', 'Fuse'
+        @span outlet: 'headText', 'Fuse'
       @div class: 'panel-body view-scroller', outlet: 'body'
+
+  innerElement: null
 
   initialize: (serializedState) ->
     @numTabs = 0
@@ -19,16 +21,20 @@ class FuseBottomPanel extends View
 
   addTab: (header, factory) ->
     id = header.replace(/\s+/g, '-')
-    @heading.append $$ ->
+    @heading.prepend $$ ->
       @button class: 'btn pull-right', id: id, header
     @on 'click', "\##{id}", (args) => @setInnerElement(header, factory())
 
     if @numTabs == 0
       @setInnerElement(header, factory())
+      ++@numTabs
 
   setInnerElement: (header, element) ->
-    $("#headText").replaceWith('Fuse - ' + header)
+    @headText.replaceWith('Fuse - ' + header)
     @body.empty().append(element)
+
+    @innerElement?.destroy?()
+    @innerElement = element
 
   resizeStarted: =>
     $(document).on('mousemove', @resizeView)
@@ -41,6 +47,9 @@ class FuseBottomPanel extends View
   resizeView: ({which, pageY}) =>
     return @resizeStopped() unless which is 1
     @body.height($(document.body).height() - pageY - @heading.outerHeight())
+
+  destroy: ->
+    @innerElement?.destroy?()
 
   serialize: ->
     height: @body.height()
