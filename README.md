@@ -1,5 +1,11 @@
-# fuse package
+# Fuse
 
-A short description of your package.
+Atom Editor plugin for [Fuse](https://www.fusetools.com/).
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+##Current Features
+* Preview your app from Atom.
+* Syntax highlightning for Uno and UX.
+* Build and debug output including error list.
+* Selection of UX tags reflected in preview based on caret position.
+
+![A screenshot of your package](http://i.imgur.com/pFUfiLe.gif)
