@@ -11,8 +11,6 @@ FuseLauncher = require './fuseLauncher'
 Preview = require './preview'
 Path = require 'path'
 {OutputView, LogEvent, OutputModel} = require './outputView'
-apd = require('atom-package-dependencies');
-apd.install()
 
 module.exports = Fuse =
   config:
