@@ -35,6 +35,7 @@ class FuseBottomPanel extends View
 
     @innerElement?.destroy?()
     @innerElement = element
+    @innerElement.setScrollProvider? @body
 
   resizeStarted: =>
     $(document).on('mousemove', @resizeView)

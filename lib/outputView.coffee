@@ -13,18 +13,6 @@ OutputModel:
     constructor: (buildObserver) ->
       super @dispose
       @emitter = new Emitter
-      @subscriptions = new CompositeDisposable
-
-      lastId = -1
-      @subscriptions.add buildObserver.observeOnBuildStarted (data) =>
-        if data.BuildType == "FullCompile" and lastId != data.BuildId
-          lastId = data.BuildId
-          @clear()
-
-      @subscriptions.add buildObserver.observeOnBuildLogged (data) =>
-        if lastId != data.BuildId
-          return
-        @log new LogEvent message: data.Message ? ""
 
     observeLogEvents: (callback) ->
       callback(logEvent) for logEvent in @logEvents
@@ -43,7 +31,6 @@ OutputModel:
 
     dispose: ->
       @buildLogEventSub.dispose()
-      @subscriptions.dispose()
 
 OutputView:
   class OutputView extends View
@@ -66,6 +53,16 @@ OutputView:
           @p message
       else
         @output.append message
+
+      if not @scrollProvider?
+        return
+
+      atBottom = (@scrollProvider.scrollTop() + @scrollProvider.innerHeight() + 30 > @scrollProvider[0].scrollHeight)
+      if atBottom
+        @scrollProvider.scrollTop(@scrollProvider[0].scrollHeight)
+
+    setScrollProvider: (@scrollProvider) ->
+      @scrollProvider.scrollTop(@scrollProvider[0].scrollHeight)
 
     destroy: ->
       logEventSub?.dispose()
