@@ -33,8 +33,7 @@ SubscribeRequest:
 
 GetCodeSuggestionsRequest:
   class GetCodeSuggestionsRequest extends Request
-    constructor: (args) ->
-      console.log(MessageHelper.convertToCaretPos(args.caretPosition))
+    constructor: (args) ->      
       super "Fuse.GetCodeSuggestions", {
         Text: args.text,
         Path: args.path,
