@@ -6,7 +6,8 @@ class FuseBottomPanel extends View
     @div class: 'fuse view-resizer panel', =>
       @div class: 'view-resize-handle', outlet: 'resizeHandle'
       @div class: 'fuse-panel-heading panel-heading', dblclick: 'toggle', outlet: 'heading', =>
-        @span outlet: 'headText', 'Fuse'
+        @div class: 'fuse-img'
+        @span class: 'panel-head-text', outlet: 'headText', 'Fuse'
       @div class: 'panel-body view-scroller', outlet: 'body'
 
   innerElement: null
@@ -30,7 +31,7 @@ class FuseBottomPanel extends View
       ++@numTabs
 
   setInnerElement: (header, element) ->
-    @headText.text('Fuse - ' + header)
+    @headText.text(header)
     @body.empty().append(element)
 
     @innerElement?.destroy?()
