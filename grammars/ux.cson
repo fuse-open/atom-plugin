@@ -1,0 +1,10 @@
+'scopeName': 'text.ux'
+'name': 'UX'
+'fileTypes': [
+  'ux'
+]
+'patterns': [
+  {
+    'include': 'text.xml'
+  }
+]

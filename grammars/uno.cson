@@ -1,0 +1,471 @@
+'scopeName': 'source.uno'
+'name': 'Uno'
+'fileTypes': [
+  'uno'
+]
+'foldingStartMarker': '^\\s*#\\s*region|^\\s*/\\*|^(?![^{]*?//|[^{]*?/\\*(?!.*?\\*/.*?\\{)).*?\\{\\s*($|//|/\\*(?!.*?\\*/.*\\S))'
+'foldingStopMarker': '^\\s*#\\s*endregion|^\\s*\\*/|^\\s*\\}'
+'patterns': [
+  {
+    'captures':
+      '1':
+        'name': 'keyword.other.using.source.uno'
+    'begin': '^\\s*(using)\b\s*'
+    'end': '\\s*(?:$|(;))'
+    'name': 'meta.keyword.using.source.uno'
+  }
+  {
+    'begin': '^\\s*((namespace)\\s+([\\w.]+))'
+    'beginCaptures':
+      '1':
+        'name': 'meta.namespace.identifier.source.uno'
+      '2':
+        'name': 'keyword.other.namespace.source.uno'
+      '3':
+        'name': 'entity.name.type.namespace.source.uno'
+    'end': '}'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.section.namespace.end.source.uno'
+    'name': 'meta.namespace.source.uno'
+    'patterns': [
+      {
+        'begin': '{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.section.namespace.begin.source.uno'
+        'end': '(?=})'
+        'name': 'meta.namespace.body.source.uno'
+        'patterns': [
+          {
+            'include': '#code'
+          }
+        ]
+      }
+    ]
+  }
+  {
+    'include': '#code'
+  }
+]
+'repository':
+  'block':
+    'patterns': [
+      {
+        'begin': '{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.section.block.begin.source.uno'
+        'end': '}'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.section.block.end.source.uno'
+        'name': 'meta.block.source.uno'
+        'patterns': [
+          {
+            'include': '#code'
+          }
+        ]
+      }
+    ]
+  'builtinTypes':
+    'patterns': [
+      {
+        'match': '\\b(bool|byte|sbyte|char|decimal|double|float([234]?|[234]x[234]?)|int[234]?|uint|long|ulong|object|short|ushort|string|void|class|struct|enum|interface|block)\\b'
+        'name': 'storage.type.source.uno'
+      }
+    ]
+  'class':
+    'begin': '(?=\\w?[\\w\\s]*(?:class|struct|interface|enum|block)\\s+\\w+)'
+    'end': '}'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.section.class.end.source.uno'
+    'name': 'meta.class.source.uno'
+    'patterns': [
+      {
+        'include': '#storage-modifiers'
+      }
+      {
+        'include': '#comments'
+      }
+      {
+        'captures':
+          '1':
+            'name': 'storage.modifier.source.uno'
+          '2':
+            'name': 'entity.name.type.class.source.uno'
+        'match': '(class|struct|interface|enum|block)\\s+(\\w+)'
+        'name': 'meta.class.identifier.source.uno'
+      }
+      {
+        'begin': ':'
+        'end': '(?={)'
+        'patterns': [
+          {
+            'captures':
+              '1':
+                'name': 'storage.type.source.uno'
+            'match': '\\s*,?([A-Za-z_]\\w*)\\b'
+          }
+        ]
+      }
+      {
+        'begin': '{'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.section.class.begin.source.uno'
+        'end': '(?=})'
+        'name': 'meta.class.body.source.uno'
+        'patterns': [
+          {
+            'include': '#method'
+          }
+          {
+            'include': '#code'
+          }
+        ]
+      }
+    ]
+  'code':
+    'patterns': [
+      {
+        'include': '#block'
+      }
+      {
+        'include': '#comments'
+      }
+      {
+        'include': '#class'
+      }
+      {
+        'include': '#constants'
+      }
+      {
+        'include': '#storage-modifiers'
+      }
+      {
+        'include': '#keywords'
+      }
+      {
+        'include': '#preprocessor'
+      }
+      {
+        'include': '#method-call'
+      }
+      {
+        'include': '#builtinTypes'
+      }
+      {
+        'include': '#documentation'
+      }
+    ]
+  'comments':
+    'patterns': [
+      {
+        'begin': '///'
+        'captures':
+          '0':
+            'name': 'punctuation.definition.comment.source.uno'
+        'end': '$\\n?'
+        'name': 'comment.block.documentation.source.uno'
+        'patterns': [
+          {
+            'include': 'text.xml'
+          }
+        ]
+      }
+      {
+        'begin': '/\\*'
+        'captures':
+          '0':
+            'name': 'punctuation.definition.comment.source.uno'
+        'end': '\\*/\\n?'
+        'name': 'comment.block.source.uno'
+      }
+      {
+        'begin': '//'
+        'captures':
+          '1':
+            'name': 'punctuation.definition.comment.source.uno'
+        'end': '$\\n?'
+        'name': 'comment.line.double-slash.source.uno'
+      }
+    ]
+  'constants':
+    'patterns': [
+      {
+        'match': '\\b(true|false|null|this|base)\\b'
+        'name': 'constant.language.source.uno'
+      }
+      {
+        'match': '\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b'
+        'name': 'constant.numeric.source.uno'
+      }
+      {
+        'captures':
+          '0':
+            'name': 'punctuation.definition.string.begin.source.uno'
+        'match': '@"([^"]|"")*"'
+        'name': 'string.quoted.double.literal.source.uno'
+      }
+      {
+        'begin': '"'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.source.uno'
+        'end': '"'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.source.uno'
+        'name': 'string.quoted.double.source.uno'
+        'patterns': [
+          {
+            'match': '\\\\.'
+            'name': 'constant.character.escape.source.uno'
+          }
+        ]
+      }
+      {
+        'begin': '\''
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.string.begin.source.uno'
+        'end': '\''
+        'endCaptures':
+          '0':
+            'name': 'punctuation.definition.string.end.source.uno'
+        'name': 'string.quoted.single.source.uno'
+        'patterns': [
+          {
+            'match': '\\\\.'
+            'name': 'constant.character.escape.source.uno'
+          }
+        ]
+      }
+    ]
+  'keywords':
+    'patterns': [
+      {
+        'match': '\\b(if|else|while|for|foreach|in|do|return|continue|break|switch|case|default|goto|throw|try|catch|finally|lock|yield)\\b'
+        'name': 'keyword.control.source.uno'
+      }
+      {
+        'match': '\\b(from|where|select|group|into|orderby|join|let|on|equals|by|ascending|descending)\\b'
+        'name': 'keyword.linq.source.uno'
+      }
+      {
+        'match': '\\b(new|is|as|using|checked|unchecked|typeof|sizeof|override|readonly|stackalloc)\\b'
+        'name': 'keyword.operator.source.uno'
+      }
+      {
+        'match': '\\b(var|event|delegate|add|remove|set|get|value|apply)\\b'
+        'name': 'keyword.other.source.uno'
+      }
+    ]
+  'method':
+    'patterns': [
+      {
+        'begin': '\\['
+        'end': '\\]'
+        'name': 'meta.method.annotation.source.uno'
+        'patterns': [
+          {
+            'include': '#constants'
+          }
+          {
+            'include': '#preprocessor'
+          }
+          {
+            'include': '#builtinTypes'
+          }
+        ]
+      }
+      {
+        'begin': '(?=\\bnew\\s+)(?=[\\w<].*\\s+)(?=[^=]+\\()'
+        'end': '(?={|;)'
+        'name': 'meta.new-object.source.uno'
+        'patterns': [
+          {
+            'include': '#code'
+          }
+        ]
+      }
+      {
+        'begin': '(?!new)(?=[\\w<].*\\s+)(?=[^=]+\\()'
+        'end': '(})|(?=;)'
+        'endCaptures':
+          '1':
+            'name': 'punctuation.section.method.end.source.uno'
+        'name': 'meta.method.source.uno'
+        'patterns': [
+          {
+            'include': '#storage-modifiers'
+          }
+          {
+            'begin': '([\\w.]+)\\s*\\('
+            'beginCaptures':
+              '1':
+                'name': 'entity.name.function.source.uno'
+            'end': '\\)'
+            'name': 'meta.method.identifier.source.uno'
+            'patterns': [
+              {
+                'include': '#parameters'
+              }
+            ]
+          }
+          {
+            'begin': '(?=\\w.*\\s+[\\w.]+\\s*\\()'
+            'end': '(?=[\\w.]+\\s*\\()'
+            'name': 'meta.method.return-type.source.uno'
+            'patterns': [
+              {
+                'include': '#builtinTypes'
+              }
+            ]
+          }
+          {
+            'begin': ':\\s*(this|base)\\s*\\('
+            'beginCaptures':
+              '1':
+                'name': 'constant.language.source.uno'
+            'end': '\\)'
+            'name': 'meta.method.base-call.source.uno'
+            'patterns': [
+              {
+                'include': '#builtinTypes'
+              }
+            ]
+          }
+          {
+            'begin': '{'
+            'beginCaptures':
+              '0':
+                'name': 'punctuation.section.method.begin.source.uno'
+            'end': '(?=})'
+            'name': 'meta.method.body.source.uno'
+            'patterns': [
+              {
+                'include': '#code'
+              }
+            ]
+          }
+        ]
+      }
+      {
+        'begin': '(?!new)(?=[\\w<].*\\s+)(?=[^=]+\\{)'
+        'end': '}'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.section.property.end.source.uno'
+        'name': 'meta.property.source.uno'
+        'patterns': [
+          {
+            'include': '#storage-modifiers'
+          }
+          {
+            'begin': '([\\w.]+)\\s*(?={)'
+            'captures':
+              '1':
+                'name': 'entity.name.function.source.uno'
+            'end': '(?={)'
+            'name': 'meta.method.identifier.source.uno'
+          }
+          {
+            'begin': '(?=\\w.*\\s+[\\w.]+\\s*\\{)'
+            'end': '(?=[\\w.]+\\s*\\{)'
+            'name': 'meta.method.return-type.source.uno'
+            'patterns': [
+              {
+                'include': '#builtinTypes'
+              }
+            ]
+          }
+          {
+            'begin': '{'
+            'beginCaptures':
+              '0':
+                'name': 'punctuation.section.property.begin.source.uno'
+            'end': '(?=})'
+            'name': 'meta.method.body.source.uno'
+            'patterns': [
+              {
+                'include': '#code'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  'method-call':
+    'begin': '([\\w$]+)(\\()'
+    'beginCaptures':
+      '1':
+        'name': 'meta.method.source.uno'
+      '2':
+        'name': 'punctuation.definition.method-parameters.begin.source.uno'
+    'end': '\\)'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.method-parameters.end.source.uno'
+    'name': 'meta.method-call.source.uno'
+    'patterns': [
+      {
+        'match': ','
+        'name': 'punctuation.definition.seperator.parameter.source.uno'
+      }
+      {
+        'include': '#code'
+      }
+    ]
+  'parameters':
+    'begin': '\\b(ref|params|out)?\\s*\\b([\\w.\\[\\]]+)\\s+(\\w+)\\s*(=)?'
+    'beginCaptures':
+      '1':
+        'name': 'storage.type.modifier.source.uno'
+      '2':
+        'name': 'storage.type.generic.source.uno'
+      '3':
+        'name': 'variable.parameter.function.source.uno'
+      '4':
+        'name': 'keyword.operator.assignment.source.uno'
+    'end': '(?:(,)|(?=[\\)]))'
+    'endCaptures':
+      '1':
+        'name': 'punctuation.definition.separator.parameter.source.uno'
+    'patterns': [
+      {
+        'include': '#constants'
+      }
+      {
+        'include': '#block'
+      }
+    ]
+  'preprocessor':
+    'patterns': [
+      {
+        'captures':
+          '2':
+            'name': 'meta.toc-list.region.source.uno'
+        'match': '^\\s*#\\s*(region)\\b(.*)$'
+        'name': 'meta.preprocessor.source.uno'
+      }
+      {
+        'captures':
+          '2':
+            'name': 'entity.name.function.preprocessor.source.uno'
+        'match': '^\\s*#\\s*(define)\\b\\s*(\\S*)'
+        'name': 'meta.preprocessor.source.uno'
+      }
+      {
+        'captures':
+          '2':
+            'name': 'keyword.control.import.source.uno'
+        'match': '^\\s*#\\s*(if|else|elif|endif|define|undef|warning|error|line|pragma|region|endregion)\\b'
+        'name': 'meta.preprocessor.source.uno'
+      }
+    ]
+  'storage-modifiers':
+    'match': '\\b(event|delegate|internal|public|protected|private|static|const|new|sealed|abstract|virtual|override|extern|unsafe|readonly|volatile|implicit|explicit|operator|async|partial|intrinsic|swizzler)\\b'
+    'name': 'storage.modifier.source.uno'

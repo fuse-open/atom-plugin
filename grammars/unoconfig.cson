@@ -1,0 +1,10 @@
+'scopeName': 'text.unoconfig'
+'name': 'Uno Config'
+'fileTypes': [
+  'unoconfig'
+]
+'patterns': [
+  {
+    'include': 'source.js'
+  }
+]

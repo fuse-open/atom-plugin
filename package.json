@@ -3,6 +3,7 @@
   "main": "./lib/fuse",
   "version": "0.1.0",
   "description": "Fuse package for Atom (www.fusetools.com)",
+  "repository": "https://github.com/fusetools/Fuse.AtomPlugin",
   "keywords": [
   ],
   "activationCommands": {

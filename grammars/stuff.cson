@@ -1,0 +1,10 @@
+'scopeName': 'text.stuff'
+'name': 'Stuff File'
+'fileTypes': [
+  'stuff'
+]
+'patterns': [
+  {
+    'include': 'source.js'
+  }
+]

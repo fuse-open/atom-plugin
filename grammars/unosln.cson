@@ -1,0 +1,10 @@
+'scopeName': 'text.unosln'
+'name': 'Uno Solution'
+'fileTypes': [
+  'unosln'
+]
+'patterns': [
+  {
+    'include': 'text.xml'
+  }
+]

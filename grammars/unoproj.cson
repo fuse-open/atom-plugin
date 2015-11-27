@@ -1,0 +1,10 @@
+'scopeName': 'text.unoproj'
+'name': 'Uno Project'
+'fileTypes': [
+  'unoproj'
+]
+'patterns': [
+  {
+    'include': 'source.json'
+  }
+]
