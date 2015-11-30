@@ -1,4 +1,4 @@
-# Fuse
+# Fuse - COMING SOON - PLACEHOLDER
 
 Atom Editor plugin for [Fuse](https://www.fusetools.com/).
 
