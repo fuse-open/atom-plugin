@@ -1,14 +1,11 @@
 {
   "name": "fuse",
   "main": "./lib/fuse",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Fuse package for Atom (www.fusetools.com)",
-  "repository": "https://github.com/fusetools/Fuse.AtomPlugin",
-  "keywords": [
-  ],
-  "activationCommands": {
-  },
   "repository": "https://github.com/atom/fuse",
+  "keywords": [],
+  "activationCommands": {},
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
@@ -24,6 +21,5 @@
     "atom-package-dependencies": "latest",
     "atom-space-pen-views": ">=2.1.0"
   },
-  "package-dependencies": {
-  }
+  "package-dependencies": {}
 }
