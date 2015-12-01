@@ -72,7 +72,7 @@ module.exports = Fuse =
     @uxProvider = new UXProvider @daemon
 
   getProvider: ->
-    #@uxProvider
+    @uxProvider
 
   deactivate: ->
     @subscriptions?.dispose()
