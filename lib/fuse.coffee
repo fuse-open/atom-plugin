@@ -18,6 +18,10 @@ module.exports = Fuse =
       type: 'string'
       default: 'fuse'
       description: 'Set absolute path/name of fuse executable.'
+    fuseSelection:
+      type: 'boolean'
+      default: 'true'
+      description: 'Enable selection of UX tags reflected in preview based on caret position.'
 
   subscriptions: null
   daemon: null

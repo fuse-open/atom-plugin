@@ -1,5 +1,5 @@
 {SelectionChangedEvent} = require './messages'
-{Disposable} = require 'atom'
+{Disposable, CompositeDisposable} = require 'atom'
 
 # Public: The {SelectionChangedNotifier} will listen for
 # cursor position changes done in an UX file.
@@ -7,6 +7,7 @@
 module.exports =
 class SelectionChangedNotifier extends Disposable
   textEditorSub = null
+  fuseSelectionSub = null
 
   # Public: Creates a new {SelectionChangedNotifier}.
   # Constructor will start listening.
@@ -16,7 +17,14 @@ class SelectionChangedNotifier extends Disposable
   constructor: (@daemon) ->
     super(@dispose)
 
-    @textEditorSub = atom.workspace.observeTextEditors (editor) =>
+    @fuseSelectionSub = atom.config.observe 'fuse.fuseSelection', (turnOnSelection) =>
+      @textEditorSub?.dispose()
+      if turnOnSelection
+        @textEditorSub = @hookSelectionObserver()
+
+  hookSelectionObserver: () ->
+    subscriptions = new CompositeDisposable
+    subscriptions.add atom.workspace.observeTextEditors (editor) =>
       if editor.getGrammar().name is "UX"
         cursorChangeSub = editor.onDidChangeCursorPosition (event) =>
           @cursorPositionChangedInUxEditor(editor, event)
@@ -24,6 +32,11 @@ class SelectionChangedNotifier extends Disposable
         destroySub = editor.onDidDestroy ->
           cursorChangeSub.dispose()
           destroySub.dispose()
+
+        subscriptions.add cursorChangeSub
+        subscriptions.add destroySub
+
+    return subscriptions
 
   cursorPositionChangedInUxEditor: (editor, event) ->
     path = editor.getPath()
@@ -36,4 +49,5 @@ class SelectionChangedNotifier extends Disposable
         caretPosition: cursorPos))
 
   dispose: =>
-    @textEditorSub.dispose()
+    @fuseSelectionSub.dispose()
+    @textEditorSub?.dispose()
