@@ -14,7 +14,7 @@ class UXProvider
   getSuggestions: ({editor, bufferPosition, scopeDescriptor, prefix, activatedManually}) ->
     new Promise (resolve) =>
       path = editor.getPath()
-      text = editor.getText()
+      text = editor.getText().replace(/\r/gm, '')
       @daemon.request(
         new GetCodeSuggestionsRequest(
           text: text,
@@ -30,7 +30,12 @@ class UXProvider
           suggestions = response.result.CodeSuggestions
           completions = []
           for suggestion in suggestions
-            completions.push {text: suggestion.Suggestion}
+            if suggestion.Type == 'Class'
+              type = 'class'
+            if suggestion.Type == 'Property'
+              type = 'property'
+
+            completions.push {text: suggestion.Suggestion, type: type}
 
           resolve(completions)
       )
