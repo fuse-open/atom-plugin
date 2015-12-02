@@ -17,7 +17,9 @@ class Daemon extends Disposable
       daemonCommand,
       @messageFromDaemon,
       () =>
-        @observeBroadcastedEvents(sub.filter, sub.replay, sub.callback) for sub in @eventSubscriptions
+        tmpCopy = @eventSubscriptions.splice(0)
+        @eventSubscriptions = []
+        @observeBroadcastedEvents(sub.filter, sub.replay, sub.callback) for sub in tmpCopy
     )
 
   broadcastEvent: (event) ->
@@ -67,7 +69,7 @@ class Daemon extends Disposable
     return @uniqueId++
 
   dispose: =>
-    eventSubscriptions = []
+    @eventSubscriptions = []
     @daemonConnection.dispose()
 
   class DaemonReconnector extends Disposable

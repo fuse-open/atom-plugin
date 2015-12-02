@@ -66,6 +66,7 @@ class FuseBottomPanel extends View
 
   destroy: ->
     @innerElement?.destroy?()
+    @hide()
 
   serialize: ->
     height: @body.height()
