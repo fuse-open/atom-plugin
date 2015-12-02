@@ -1,4 +1,4 @@
-# 0.2.4 - First Official Release
+# 0.2.5 - First Official Release
 
 ## Features
 - Preview your app from Atom.
