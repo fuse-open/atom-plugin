@@ -55,10 +55,18 @@ module.exports = Fuse =
     @fuseBottomPanel.addTab 'Output', ->
       new OutputView outputModel
 
+    @subscriptions.add errorlistModel.onFocusChanged () =>
+      @fuseBottomPanel.focusTab 'Error List'
+
+    @subscriptions.add outputModel.onFocusChanged () =>
+      @fuseBottomPanel.focusTab 'Output'
+
     @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:preview-local': ->
       textEditor = @getModel().getActiveTextEditor()
       p = Preview.run(fuseLauncher, 'local', Path.dirname(textEditor.getPath()))
       outputModel.clear()
+      outputModel.focus()
+
       p.observeOutput (msg) ->
         outputModel.log new LogEvent(message: msg)
       p.observeError (msg) ->
@@ -68,6 +76,8 @@ module.exports = Fuse =
       textEditor = @getModel().getActiveTextEditor()
       p = Preview.run(fuseLauncher, 'android', Path.dirname(textEditor.getPath()))
       outputModel.clear()
+      outputModel.focus()
+
       p.observeOutput (msg) ->
         outputModel.log new LogEvent(message: msg)
       p.observeError (msg) ->

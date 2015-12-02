@@ -26,6 +26,7 @@ ErrorListModel:
           file: data.Path,
           position: position
         })
+        @focus()
 
     observeBuildEvents: (callback) ->
       callback(buildEvent) for buildEvent in @buildEvents
@@ -42,6 +43,12 @@ ErrorListModel:
       if not file
         return
       atom.workspace.open(file, initialLine: position.row, initialColumn: position.column)
+
+    onFocusChanged: (callback) ->
+      @emitter.on 'focus', callback
+
+    focus: ->
+      @emitter.emit 'focus'
 
     clear: ->
       @buildEvents = []

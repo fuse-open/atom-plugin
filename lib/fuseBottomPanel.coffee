@@ -11,6 +11,7 @@ class FuseBottomPanel extends View
       @div class: 'panel-body view-scroller', outlet: 'body'
 
   innerElement: null
+  tabConstructors: {}
 
   initialize: (serializedState) ->
     @numTabs = 0
@@ -30,6 +31,8 @@ class FuseBottomPanel extends View
       @setInnerElement(header, factory())
       ++@numTabs
 
+    @tabConstructors[header] = factory: factory
+
   setInnerElement: (header, element) ->
     @headText.text(header)
     @body.empty().append(element)
@@ -45,6 +48,14 @@ class FuseBottomPanel extends View
   resizeStopped: =>
     $(document).off('mousemove', @resizeView)
     $(document).off('mouseup', @resizeStopped)
+
+  focusTab: (header) ->
+    tabFactory = @tabConstructors[header]
+    if not tabFactory?
+      console.log(header + " no tab factory with that name.")
+      return
+
+    @setInnerElement(header, tabFactory.factory())
 
   resizeView: ({which, pageY}) =>
     return @resizeStopped() unless which is 1

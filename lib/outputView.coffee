@@ -21,6 +21,9 @@ OutputModel:
     observeOnClear: (callback) ->
       return @emitter.on 'clear', callback
 
+    onFocusChanged: (callback) ->
+      @emitter.on 'focus', callback
+
     log: (logEvent) ->
       @logEvents.push logEvent
       @emitter.emit 'new-log-event', logEvent
@@ -28,6 +31,9 @@ OutputModel:
     clear: ->
       @logEvents = []
       @emitter.emit 'clear'
+
+    focus: ->
+      @emitter.emit 'focus'
 
     dispose: ->
       @buildLogEventSub.dispose()
