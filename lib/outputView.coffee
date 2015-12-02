@@ -65,4 +65,5 @@ OutputView:
       @scrollProvider.scrollTop(@scrollProvider[0].scrollHeight)
 
     destroy: ->
-      logEventSub?.dispose()
+      @logEventSub?.dispose()
+      @clearSub?.dispose()
