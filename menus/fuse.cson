@@ -15,7 +15,7 @@
     'submenu': [
       'label': 'Fuse'
       'submenu': [
-          'label': 'Show Panel'
+          'label': 'Toggle Panel'
           'command': 'fuse:panel'
       ]
     ]
