@@ -63,27 +63,27 @@ module.exports = Fuse =
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:preview-local': ->
       textEditor = @getModel().getActiveTextEditor()
-      p = Preview.run(fuseLauncher, 'local', Path.dirname(textEditor.getPath()))
-      outputModel.clear()
-      outputModel.focus()
-
-      p.observeOutput (msg) ->
-        outputModel.log new LogEvent(message: msg)
-      p.observeError (msg) ->
-        outputModel.log new LogEvent(message: msg)
+      Fuse.previewWithOutput(fuseLauncher, 'local', Path.dirname(textEditor.getPath()), outputModel)
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:preview-android': ->
       textEditor = @getModel().getActiveTextEditor()
-      p = Preview.run(fuseLauncher, 'android', Path.dirname(textEditor.getPath()))
-      outputModel.clear()
-      outputModel.focus()
+      Fuse.previewWithOutput(fuseLauncher, 'android', Path.dirname(textEditor.getPath()), outputModel)
 
-      p.observeOutput (msg) ->
-        outputModel.log new LogEvent(message: msg)
-      p.observeError (msg) ->
-        outputModel.log new LogEvent(message: msg)
+    @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:preview-ios': ->
+      textEditor = @getModel().getActiveTextEditor()
+      Fuse.previewWithOutput(fuseLauncher, 'ios', Path.dirname(textEditor.getPath()), outputModel)
 
     @uxProvider = new UXProvider @daemon
+
+  previewWithOutput: (fuseLauncher, target, path, output) ->
+    p = Preview.run(fuseLauncher, target, path)
+    output.clear()
+    output.focus()
+
+    p.observeOutput (msg) ->
+      output.log new LogEvent(message: msg)
+    p.observeError (msg) ->
+      output.log new LogEvent(message: msg)
 
   getProvider: ->
     @uxProvider

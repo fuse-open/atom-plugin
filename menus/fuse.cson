@@ -5,6 +5,7 @@
       label: 'Fuse preview'
       submenu: [
         {label: 'Local', command: 'fuse:preview-local'}
+        {label: 'iOS', command: 'fuse:preview-ios'}
         {label: 'Android', command: 'fuse:preview-android'}
       ]
     }
