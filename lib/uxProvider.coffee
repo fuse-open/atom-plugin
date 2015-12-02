@@ -37,25 +37,28 @@ class UXProvider
           suggestions = response.result.CodeSuggestions
           completions = []
           for suggestion in suggestions
-            if suggestion.Type == 'Class'
-              completions.push {
-                text: suggestion.Suggestion,
-                type: 'tag'
-              }
-            else if suggestion.Type == 'Property'
-              completions.push {
-                displayText: suggestion.Suggestion,
-                snippet: "#{suggestion.Suggestion}=\"$1\"$0"
-                type: 'attribute'
-              }
-            else
-              completions.push {
-                text: suggestion.Suggestion,
-                type: 'value'
-              }
+            completions.push @buildSuggestion(suggestion)
 
           resolve(completions)
       )
+
+  buildSuggestion: (suggestion) ->
+    if suggestion.Type == 'Class'
+      return {
+        text: suggestion.Suggestion,
+        type: 'tag'
+      }
+    else if suggestion.Type == 'Property'
+      return {
+        displayText: suggestion.Suggestion,
+        snippet: "#{suggestion.Suggestion}=\"$1\"$0"
+        type: 'attribute'
+      }
+    else
+      return {
+        text: suggestion.Suggestion,
+        type: 'value'
+      }
 
   onDidInsertSuggestion: ({editor, triggerPosition, suggestion}) ->
 
