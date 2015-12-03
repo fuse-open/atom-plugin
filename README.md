@@ -2,7 +2,7 @@
 
 Atom Editor plugin for [Fuse](https://www.fusetools.com/).
 
-##Current Features
+## Current Features
 * Preview your app from Atom.
 * Syntax highlighting for Uno and UX.
 * Build and debug output including error list.
