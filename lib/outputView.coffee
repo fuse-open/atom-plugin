@@ -49,6 +49,7 @@ OutputView:
         @log(logEvent.message)
       @clearSub = model.observeOnClear =>
         @clear()
+      @oldOutputHeight = 0
 
     clear: ->
       @output.empty()
@@ -63,12 +64,15 @@ OutputView:
       if not @scrollProvider?
         return
 
-      atBottom = (@scrollProvider.scrollTop() + @scrollProvider.innerHeight() + 30 > @scrollProvider[0].scrollHeight)
+      outputHeight = @output.innerHeight()
+      deltaHeight = outputHeight - @oldOutputHeight
+      @oldOutputHeight = outputHeight
+      atBottom = @scrollProvider.scrollTop() + @scrollProvider.innerHeight() + deltaHeight >= outputHeight
       if atBottom
-        @scrollProvider.scrollTop(@scrollProvider[0].scrollHeight)
+        @scrollProvider.scrollTop outputHeight
 
     setScrollProvider: (@scrollProvider) ->
-      @scrollProvider.scrollTop(@scrollProvider[0].scrollHeight)
+      @scrollProvider.scrollTop(@output.innerHeight())
 
     destroy: ->
       @logEventSub?.dispose()
