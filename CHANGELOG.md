@@ -1,3 +1,10 @@
+# 0.2.7
+## Bugs
+- Fixed crash reports related to not being able to send messages to daemon.
+
+## Features
+- Added inline JavaScript syntax highlighting for UX.
+
 # 0.2.6 - Scroll To Bottom Patch
 ## Bugs
 - Fixed a bug where output panel was not scrolled to bottom when lines were appended.
