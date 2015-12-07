@@ -78,7 +78,10 @@ module.exports =
       # ```
       length = Buffer.byteLength(serializedMsg, 'utf-8')
       packedMsg = msgType + '\n' + length + '\n' + serializedMsg
-      @fuseClient.stdin.write packedMsg
+      try
+        @fuseClient.stdin.write packedMsg
+      catch e
+        console.log e
 
     dispose: =>
       @fuseClient.kill()
