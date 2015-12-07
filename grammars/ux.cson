@@ -7,4 +7,73 @@
   {
     'include': 'text.xml'
   }
+  {
+    'begin': '(?:^\\s+)?(<)((?i:JavaScript))\\b(?![^>]*/>)'
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.definition.tag.xml'
+      '2':
+        'name': 'entity.name.tag.javascript.ux'
+    'end': '(?<=</(JavaScript))(>)(?:\\s*\\n)?'
+    'endCaptures':
+      '2':
+        'name': 'punctuation.definition.tag.xml'
+    'contentName': 'source.js.embedded.ux'
+    'patterns': [
+      {
+        'include': '#tag-stuff'
+      }
+      {
+        'begin': '(?<!</(?:JavaScript))(>)'
+        'captures':
+          '1':
+            'name': 'punctuation.definition.tag.xml'
+          '2':
+            'name': 'entity.name.tag.javascript.ux'
+        'end': '(</)((?i:JavaScript))'
+        'patterns': [
+          {
+            'captures':
+              '1':
+                'name': 'punctuation.definition.comment.js'
+            'match': '(//).*?((?=</JavaScript)|$\\n?)'
+            'name': 'comment.line.double-slash.js'
+          }
+          {
+            'begin': '/\\*'
+            'captures':
+              '0':
+                'name': 'punctuation.definition.comment.js'
+            'end': '\\*/|(?=</JavaScript)'
+            'name': 'comment.block.js'
+          }
+          {
+            'include': 'source.js'
+          }
+        ]
+      }
+    ]
+  }
 ]
+'repository':
+  'tag-stuff':
+    'patterns': [
+      {
+        'include': '#tag-id-attribute'
+      }
+      {
+        'include': '#tag-generic-attribute'
+      }
+      {
+        'include': '#string-double-quoted'
+      }
+      {
+        'include': '#string-single-quoted'
+      }
+      {
+        'include': '#embedded-code'
+      }
+      {
+        'include': '#unquoted-attribute'
+      }
+    ]
