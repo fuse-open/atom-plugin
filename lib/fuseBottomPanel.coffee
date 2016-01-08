@@ -16,8 +16,7 @@ class FuseBottomPanel extends View
   initialize: (serializedState) ->
     @numTabs = 0
     @body.height serializedState?.height ? 200
-    if serializedState?.isHidden
-      @hide()
+    @hide()
 
     @handleEvents()
 
@@ -71,4 +70,3 @@ class FuseBottomPanel extends View
 
   serialize: ->
     height: @body.height()
-    isHidden: @.is(':hidden')
