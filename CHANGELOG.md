@@ -1,3 +1,7 @@
+# 0.2.8
+## Features
+- Fuse panel is not being visible before there are data there (it was always shown before, which users reported as annoying)
+
 # 0.2.7
 ## Bugs
 - Fixed crash reports related to not being able to send messages to daemon.
