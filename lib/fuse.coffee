@@ -39,7 +39,7 @@ module.exports = Fuse =
     @subscriptions.add new SelectionChangedNotifier @daemon
 
     @fuseBottomPanel = new FuseBottomPanel state.fuseBottomPanel
-    atom.workspace.addBottomPanel(item: @fuseBottomPanel, visibility: true, priority: 100)
+    atom.workspace.addBottomPanel(item: @fuseBottomPanel, visibility: false, priority: 100)
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:panel': =>
       @fuseBottomPanel.toggle()

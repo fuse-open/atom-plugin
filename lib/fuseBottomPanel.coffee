@@ -59,6 +59,7 @@ class FuseBottomPanel extends View
       return
 
     @setInnerElement(header, tabFactory.factory())
+    @show()
 
   resizeView: ({which, pageY}) =>
     return @resizeStopped() unless which is 1
