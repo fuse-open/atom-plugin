@@ -34,7 +34,7 @@ module.exports = Fuse =
     fuseLauncher = new FuseLauncher atom.config.get('fuse.fuseCommand')
 
     @subscriptions = new CompositeDisposable
-    @daemon = new Daemon(atom.config.get('fuse.fuseCommand'))
+    @daemon = new Daemon(fuseLauncher)
     @subscriptions.add @daemon
     @subscriptions.add new SelectionChangedNotifier @daemon
 

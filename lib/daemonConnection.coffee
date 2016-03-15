@@ -6,9 +6,9 @@ module.exports =
   class DaemonConnection extends Disposable
     fuseClient: null
 
-    constructor: (daemonCommand, @msgReceivedCallback, @onExit) ->
+    constructor: (fuseLauncher, @msgReceivedCallback, @onExit) ->
       super(@dispose)
-      @fuseClient = spawn(daemonCommand, ['daemon-client', 'Atom Plugin'])
+      @fuseClient = fuseLauncher.run ['daemon-client', 'Atom Plugin']
 
       buffer = new Buffer(0)
       @fuseClient.stdout.on('data', (data) =>

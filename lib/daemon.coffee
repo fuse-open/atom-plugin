@@ -10,11 +10,11 @@ class Daemon extends Disposable
   requestsInAir: {}
   eventSubscriptions: []
 
-  constructor: (daemonCommand) ->
+  constructor: (fuseLauncher) ->
     super(@dispose)
     @emitter = new Emitter
     @daemonConnection = new DaemonReconnector(
-      daemonCommand,
+      fuseLauncher,
       @messageFromDaemon,
       () =>
         tmpCopy = @eventSubscriptions.splice(0)
@@ -73,12 +73,12 @@ class Daemon extends Disposable
     @daemonConnection.dispose()
 
   class DaemonReconnector extends Disposable
-    constructor: (@daemonCommand, @msgReceivedCallback, @onConnected) ->
+    constructor: (@fuseLauncher, @msgReceivedCallback, @onConnected) ->
       super(@dispose)
       @connect()
 
     connect: ->
-      @daemonConnection = new DaemonConnection(@daemonCommand, @msgReceivedCallback, @onLostConnection)
+      @daemonConnection = new DaemonConnection(@fuseLauncher, @msgReceivedCallback, @onLostConnection)
       @onConnected?()
 
     send: (msgType, serializedMsg) =>
