@@ -1,4 +1,4 @@
-# 0.2.9
+# 0.3.0
 ## Features
 - Add toggle comments support to UX (eg. Edit->Toggle Comments)
 
