@@ -1,3 +1,10 @@
+# 0.2.9
+## Features
+- Add toggle comments support to UX (eg. Edit->Toggle Comments)
+
+## Bugs
+- Fixed bug where plugin crashed if Fuse wasn't found. Atom will now instead show an error
+
 # 0.2.8
 ## Features
 - Fuse panel is not being visible before there are data there (it was always shown before, which users reported as annoying)
