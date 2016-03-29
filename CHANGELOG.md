@@ -1,3 +1,7 @@
+# 0.3.1
+## Bugs
+- Fixed code suggestions for whenever carret is behind '/>'
+
 # 0.3.0
 ## Features
 - Add toggle comments support to UX (eg. Edit->Toggle Comments)
