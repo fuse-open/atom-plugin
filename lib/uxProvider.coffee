@@ -15,8 +15,7 @@ class UXProvider
   getSuggestions: ({editor, bufferPosition, scopeDescriptor, prefix, activatedManually}) ->
     # Check if we are around a '/>'
     scopes = scopeDescriptor.scopes
-    if scopes.indexOf('punctuation.definition.tag.xml') isnt -1 or
-        scopes[scopes.length - 1] == 'text.ux'
+    if scopes[scopes.length - 1] == 'text.ux'
       return []
 
     new Promise (resolve) =>
