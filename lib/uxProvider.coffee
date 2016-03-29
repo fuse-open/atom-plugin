@@ -1,4 +1,5 @@
 {GetCodeSuggestionsRequest} = require './messages'
+{Range} = require 'atom'
 
 module.exports =
 class UXProvider
@@ -13,9 +14,15 @@ class UXProvider
   constructor: (@daemon) ->
 
   getSuggestions: ({editor, bufferPosition, scopeDescriptor, prefix, activatedManually}) ->
-    # Check if we are around a '/>'
     scopes = scopeDescriptor.scopes
-    if scopes[scopes.length - 1] == 'text.ux'
+
+    # Check if we are around a '/>'
+    # Or in a inner element area
+    nextTwoChars = editor.getTextInBufferRange(
+      new Range(bufferPosition, bufferPosition.translate([0,2])))
+    isEndOfScope = scopes.indexOf('punctuation.definition.tag.xml') isnt -1 and nextTwoChars != "/>"
+
+    if isEndOfScope or scopes[scopes.length - 1] == 'text.ux'
       return []
 
     new Promise (resolve) =>
