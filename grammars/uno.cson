@@ -176,6 +176,16 @@
         ]
       }
       {
+        'begin': '/\\*\\*'
+        'end': '\\*/\\n?'
+        'captures':
+          '0':
+            'name': 'punctuation.definition.comment.source.uno'
+        'patterns': [
+          { 'include': 'text.md' }
+        ]
+      }
+      {
         'begin': '/\\*'
         'captures':
           '0':
