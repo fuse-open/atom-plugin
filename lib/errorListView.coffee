@@ -10,12 +10,12 @@ ErrorListModel:
       @emitter = new Emitter
 
       lastId = -1
-      buildObserver.observeOnBuildStarted (data) =>
+      @buildObserver.observeOnBuildStarted (data) =>
         if lastId != data.BuildId
           lastId = data.BuildId
           @clear()
 
-      buildObserver.observeOnBuildIssues (data) =>
+      @buildObserver.observeOnBuildIssues (data) =>
         if lastId != data.BuildId
           return
         position = data.StartPosition ? {Line: 0, Character: 0}
