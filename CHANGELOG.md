@@ -1,3 +1,6 @@
+# 0.3.2
+- Fixed potential problems after updating to Atom (v1.12)
+
 # 0.3.1
 ## Bugs
 - Fixed code suggestions for whenever carret is behind '/>'
