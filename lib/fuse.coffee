@@ -1,4 +1,5 @@
 SelectionChangedNotifier = require './selectionChangedNotifier'
+{FocusEditorListener} = require './focusEditor'
 Daemon = require './daemon'
 UXProvider = require './uxProvider'
 BuildObserver = require './buildObserver'
@@ -46,6 +47,8 @@ module.exports = Fuse =
 
     buildObserver = new BuildObserver @daemon.observeBroadcastedEvents
     @subscriptions.add buildObserver
+
+    focusEditorListener = new FocusEditorListener @daemon.registerRequestListener
 
     errorlistModel = new ErrorListModel buildObserver
     outputModel = new OutputModel buildObserver

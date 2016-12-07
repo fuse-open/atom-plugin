@@ -1,13 +1,14 @@
 {Disposable, Emitter} = require 'atom'
 DaemonConnection = require './daemonConnection'
 {Event, Response, Request} = require './messageTypes'
-{SubscribeRequest} = require './messages'
+{SubscribeRequest, PublishServiceRequest} = require './messages'
 
 module.exports =
 class Daemon extends Disposable
   uniqueId: 0
   daemonConnection: null
   requestsInAir: {}
+  requestListeners: {}
   eventSubscriptions: []
 
   constructor: (fuseLauncher) ->
@@ -20,10 +21,25 @@ class Daemon extends Disposable
         tmpCopy = @eventSubscriptions.splice(0)
         @eventSubscriptions = []
         @observeBroadcastedEvents(sub.filter, sub.replay, sub.callback) for sub in tmpCopy
+        for own requestName, callback of @requestListeners
+          @registerRequestListener requestName, callback
     )
 
   broadcastEvent: (event) ->
     @daemonConnection.send(event.messageType, event.serialize())
+
+  registerRequestListener: (requestName, callback) =>
+    publishServiceRequest = new PublishServiceRequest {
+      requestNames: [ requestName ]
+    }
+
+    @request(publishServiceRequest, (response) =>
+      if response.status != "Success"
+        console.log "fuse: Failed to register " + requestName " request"
+      else
+        @requestListeners[requestName] = callback
+        console.log "fuse: Successfully registered " + requestName  + " request"
+    )
 
   observeBroadcastedEvents: (filter, replay, callback) =>
     subscriptionId = @getUniqueId()
@@ -55,6 +71,15 @@ class Daemon extends Disposable
       request.callback(msg)
     else if msg instanceof Event
       @emitter.emit 'new-event', msg
+
+    else if msg instanceof Request
+      callback = @requestListeners[msg.name]
+      if callback?
+        callback msg, (response) =>
+          console.log("Sending response:")
+          @daemonConnection.send response.messageType, response.serialize()
+      else
+        console.log('fuse: Received request with name ' + msg.name + ' having no registered listener')
 
   request: (request, callback) =>
     if not callback?

@@ -40,3 +40,11 @@ GetCodeSuggestionsRequest:
         SyntaxType: args.syntaxType,
         CaretPosition: MessageHelper.convertToCaretPos(args.caretPosition)
       }
+
+PublishServiceRequest:
+  class PublishServiceRequest extends Request
+    constructor: (args) ->
+      super "PublishService", {
+        RequestNames: args.requestNames
+      }
+
