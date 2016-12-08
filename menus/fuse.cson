@@ -2,6 +2,10 @@
 'context-menu':
   'atom-text-editor': [
     {
+      label: "Locate in designer"
+      command: "fuse:locate-in-designer"
+    }
+    {
       label: 'Fuse preview'
       submenu: [
         {label: 'Local', command: 'fuse:preview-local'}

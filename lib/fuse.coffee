@@ -4,7 +4,7 @@ Daemon = require './daemon'
 UXProvider = require './uxProvider'
 BuildObserver = require './buildObserver'
 {ErrorListView, ErrorListModel} = require './errorListView'
-{SubscribeRequest} = require './messages'
+{SubscribeRequest,FocusDesignerRequest} = require './messages'
 process = require 'process'
 {CompositeDisposable, Disposable, Point} = require 'atom'
 FuseBottomPanel = require './fuseBottomPanel'
@@ -64,6 +64,9 @@ module.exports = Fuse =
     @subscriptions.add outputModel.onFocusChanged () =>
       @fuseBottomPanel.focusTab 'Output'
 
+    @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:locate-in-designer': =>
+      Fuse.locateInDesigner(fuseLauncher, @daemon, outputModel)
+
     @subscriptions.add atom.commands.add 'atom-workspace', 'fuse:preview-local': ->
       textEditor = @getModel().getActiveTextEditor()
       Fuse.previewWithOutput(fuseLauncher, 'local', Path.dirname(textEditor.getPath()), outputModel)
@@ -87,6 +90,23 @@ module.exports = Fuse =
       output.log new LogEvent(message: msg)
     p.observeError (msg) ->
       output.log new LogEvent(message: msg)
+
+  locateInDesigner: (fuseLauncher, daemon, outputModel) ->
+    console.log "fuse: Runnning locate in designer command"
+    textEditor = atom.workspace.getActiveTextEditor()
+    if textEditor?
+      console.log "fuse: Sending locate in designer request for " + textEditor.getPath()
+      position = textEditor.getCursorBufferPosition()
+      message = new FocusDesignerRequest {
+        file: textEditor.getPath(),
+        line: position.row + 1,
+        column: position.column + 1
+      }
+      daemon.request message, (response) ->
+        console.log "Got response for message"
+        console.dir response
+        if response.status == "Unhandled"
+          Fuse.previewWithOutput(fuseLauncher, 'local', Path.dirname(textEditor.getPath()), outputModel)
 
   getProvider: ->
     @uxProvider

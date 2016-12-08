@@ -48,3 +48,11 @@ PublishServiceRequest:
         RequestNames: args.requestNames
       }
 
+FocusDesignerRequest:
+  class FocusDesignerRequest extends Request
+    constructor: (args) ->
+      super "FocusDesigner", {
+        File: args.file,
+        Line: args.line,
+        Column: args.column
+      }
