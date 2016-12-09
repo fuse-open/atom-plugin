@@ -98,14 +98,13 @@ class Daemon extends Disposable
     @daemonConnection.dispose()
 
   class DaemonReconnector extends Disposable
-    constructor: (@fuseLauncher, @msgReceivedCallback, @onConnected) ->
+    constructor: (@fuseLauncher, @msgReceivedCallback, @onReconnected) ->
       super(@dispose)
       @daemonConnection = @connect()
 
     connect: ->
       try
         connection = new DaemonConnection(@fuseLauncher, @msgReceivedCallback, @onLostConnection)
-        @onConnected?()
         return connection
       catch error
         console.log error
@@ -114,6 +113,7 @@ class Daemon extends Disposable
       if not @daemonConnection?
         console.log('fuse: Connects to daemon again.')
         @daemonConnection = @connect()
+        @onReconnected?()
 
       @daemonConnection.send(msgType, serializedMsg)
 
