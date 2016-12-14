@@ -53,6 +53,8 @@ Response:
     serialize: ->
       return JSON.stringify({
         Id: @id
+        Status: @status
+        Errors: @errors
         Result: @result
       })
 
