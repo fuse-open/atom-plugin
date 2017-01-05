@@ -91,7 +91,6 @@ module.exports = Fuse =
     @uxProvider = new UXProvider @daemon
 
     # AUTOCLOSE STUFF
-
     atom.config.observe 'fuse.enabledFileExtensions', (value) =>
       @enabledFileExtensions = value
 
@@ -134,11 +133,9 @@ module.exports = Fuse =
     @uxProvider
 
   deactivate: ->
+    if @action then @action.disposalAction()
     @subscriptions?.dispose()
     @fuseBottomPanel?.destroy()
-
-    if @action then @action.disposalAction()
-    @subscriptions.dispose()
 
   serialize: ->
     fuseBottomPanel: @fuseBottomPanel?.serialize()
