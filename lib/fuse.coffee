@@ -12,8 +12,13 @@ FuseLauncher = require './fuseLauncher'
 Preview = require './preview'
 Path = require 'path'
 {OutputView, LogEvent, OutputModel} = require './outputView'
+AutoCloser = require './autoclose'
 
 module.exports = Fuse =
+  subscriptions: null
+  daemon: null
+  autoCloser: null
+
   config:
     fuseCommand:
       type: 'string'
@@ -23,9 +28,10 @@ module.exports = Fuse =
       type: 'boolean'
       default: 'true'
       description: 'Enable selection of UX tags reflected in preview based on caret position.'
-
-  subscriptions: null
-  daemon: null
+    autocloseEnabled:
+      type: 'boolean',
+      default: true,
+      description: 'Enable auto closing of UX tags.'
 
   activate: (state) ->
     console.log('fuse: Starting fuse.')
@@ -81,6 +87,8 @@ module.exports = Fuse =
 
     @uxProvider = new UXProvider @daemon
 
+    @autoCloser = new AutoCloser
+
   previewWithOutput: (fuseLauncher, target, path, output) ->
     p = Preview.run(fuseLauncher, target, path)
     output.clear()
@@ -114,6 +122,7 @@ module.exports = Fuse =
   deactivate: ->
     @subscriptions?.dispose()
     @fuseBottomPanel?.destroy()
+    @autoCloser?.deactivate()
 
   serialize: ->
     fuseBottomPanel: @fuseBottomPanel?.serialize()
