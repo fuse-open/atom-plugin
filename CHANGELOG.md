@@ -1,3 +1,6 @@
+# 0.4.0
+- Fixed auto-indentation in UX and Unoproj
+
 # 0.3.2
 - Fixed potential problems after updating to Atom (v1.12)
 
