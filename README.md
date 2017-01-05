@@ -8,6 +8,7 @@ Atom Editor plugin for [Fuse](https://www.fusetools.com/).
 * Build and debug output including error list.
 * Selection of UX tags reflected in preview based on caret position.
 * Code completion in UX.
+* Auto closing tags (borrowed from [autoclose](https://github.com/awaw00/autoclose))
 
 ![A screenshot of your package](http://i.imgur.com/pFUfiLe.gif)
 
