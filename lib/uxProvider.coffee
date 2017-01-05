@@ -3,8 +3,8 @@
 
 module.exports =
 class UXProvider
-  selector: '.text.ux'
-  disableForSelector: '.text.ux .comment'
+  selector: '.text.xml.ux'
+  disableForSelector: '.text.xml.ux .comment'
 
   inclusionPriority: 1
   excludeLowerPriority: true
