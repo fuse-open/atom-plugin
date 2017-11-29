@@ -25,6 +25,11 @@ module.exports =
         @onExit?()
       )
 
+      @fuseClient.on('error', =>
+        console.log 'fuse: deamon failed to start'
+        @onExit?()
+      )
+
     parseMsgFromBuffer: (buffer, msgCallback) =>
       start = 0
       while start < buffer.length

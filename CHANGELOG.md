@@ -1,3 +1,6 @@
+# 0.4.1
+- Fixed a problem during start-up when the Fuse daemon couldn't be started. We now log a warning instead of crashing.
+
 # 0.4.0
 - Fixed auto-indentation in UX and Unoproj
 
